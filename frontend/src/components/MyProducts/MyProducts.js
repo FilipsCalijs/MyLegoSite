@@ -1,61 +1,81 @@
-import React, { useState, useEffect, useContext } from 'react';
-import axios from 'axios';
-import { UserContext } from '../../UserContext';
+import React, { useEffect, useState, useContext } from "react";
+import axios from "axios";
+import { UserContext } from "../../UserContext";
 
 function MyProducts() {
   const { userId } = useContext(UserContext);
   const [products, setProducts] = useState([]);
-  const [newProduct, setNewProduct] = useState({
-    category: '',
-    my_price: '',
-    quantity: '',
-    market_price: ''
-  });
   const [categories, setCategories] = useState([]);
+  const [subcategories, setSubcategories] = useState([]);
+  const [formData, setFormData] = useState({
+    category: "",
+    subcategory: "",
+    my_price: "",
+    quantity: "",
+    market_price: ""
+  });
   const [editId, setEditId] = useState(null);
-  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
 
+  // Загрузка продуктов, категорий и подкатегорий
   useEffect(() => {
-    if (!userId) return;
     fetchProducts();
     fetchCategories();
-  }, [userId]);
+    fetchSubcategories();
+  }, []);
 
   const fetchProducts = () => {
     axios.get(`http://localhost:8081/my-products/${userId}`)
       .then(res => setProducts(res.data))
-      .catch(err => console.error("Fetch error:", err));
+      .catch(err => console.error("Error loading products", err));
   };
 
   const fetchCategories = () => {
-    axios.get(`http://localhost:8081/categories`)
+    axios.get("http://localhost:8081/categories")
       .then(res => setCategories(res.data))
-      .catch(err => console.error("Category fetch error:", err));
+      .catch(err => console.error("Error loading categories", err));
   };
 
-  const handleAddOrEdit = () => {
-    const endpoint = editId
+  const fetchSubcategories = () => {
+    axios.get("http://localhost:8081/subcategories")
+      .then(res => setSubcategories(res.data))
+      .catch(err => console.error("Error loading subcategories", err));
+  };
+
+  const handleChange = (e) => {
+    setFormData(prev => ({
+      ...prev,
+      [e.target.name]: e.target.value
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const url = editId
       ? `http://localhost:8081/update-product/${editId}`
-      : 'http://localhost:8081/add-product';
-    const method = editId ? 'put' : 'post';
-    axios[method](endpoint, {
-      user_id: userId,
-      ...newProduct
-    }).then(() => {
-      fetchProducts();
-      setNewProduct({ category: '', my_price: '', quantity: '', market_price: '' });
-      setEditId(null);
-    });
-  };
+      : "http://localhost:8081/add-product";
 
-  const handleDelete = (id) => {
-    axios.delete(`http://localhost:8081/delete-product/${id}`)
-      .then(() => fetchProducts());
+    const method = editId ? axios.put : axios.post;
+
+    method(url, { ...formData, user_id: userId })
+      .then(() => {
+        fetchProducts();
+        setFormData({
+          category: "",
+          subcategory: "",
+          my_price: "",
+          quantity: "",
+          market_price: ""
+        });
+        setEditId(null);
+      })
+      .catch(err => console.error("Submit error", err));
   };
 
   const handleEdit = (product) => {
-    setNewProduct({
+    setFormData({
       category: product.category,
+      subcategory: product.subcategory,
       my_price: product.my_price,
       quantity: product.quantity,
       market_price: product.market_price
@@ -63,57 +83,115 @@ function MyProducts() {
     setEditId(product.id);
   };
 
-  const handleSort = (key) => {
-    let direction = 'asc';
-    if (sortConfig.key === key && sortConfig.direction === 'asc') {
-      direction = 'desc';
-    }
-    setSortConfig({ key, direction });
-
-    const sorted = [...products].sort((a, b) => {
-      if (a[key] < b[key]) return direction === 'asc' ? -1 : 1;
-      if (a[key] > b[key]) return direction === 'asc' ? 1 : -1;
-      return 0;
-    });
-    setProducts(sorted);
+  const handleDelete = (id) => {
+    axios.delete(`http://localhost:8081/delete-product/${id}`)
+      .then(() => fetchProducts())
+      .catch(err => console.error("Delete error", err));
   };
 
   return (
-    <div>
-      <h2>🧱 My Products</h2>
+    <div className="container mt-4">
+      <h2>My Products</h2>
 
-      <select value={newProduct.category} onChange={e => setNewProduct({ ...newProduct, category: e.target.value })}>
-        <option value="">Select category</option>
-        {categories.map(cat => (
-          <option key={cat.id} value={cat.name}>{cat.name}</option>
-        ))}
-      </select>
+      <form onSubmit={handleSubmit} className="mb-4">
+        <div className="row mb-2">
+          <div className="col">
+            <select
+              name="category"
+              className="form-control"
+              value={formData.category}
+              onChange={handleChange}
+              required
+            >
+              <option value="">Select Category</option>
+              {categories.map((c) => (
+                <option key={c.id} value={c.name}>{c.name}</option>
+              ))}
+            </select>
+          </div>
+          <div className="col">
+            <select
+              name="subcategory"
+              className="form-control"
+              value={formData.subcategory}
+              onChange={handleChange}
+              required
+            >
+              <option value="">Select Subcategory</option>
+              {subcategories.map((s) => (
+                <option key={s.id} value={s.name}>{s.name}</option>
+              ))}
+            </select>
+          </div>
+        </div>
 
-      <input placeholder="My Price" value={newProduct.my_price} onChange={e => setNewProduct({ ...newProduct, my_price: e.target.value })} />
-      <input placeholder="Quantity" value={newProduct.quantity} onChange={e => setNewProduct({ ...newProduct, quantity: e.target.value })} />
-      <input placeholder="Market Price" value={newProduct.market_price} onChange={e => setNewProduct({ ...newProduct, market_price: e.target.value })} />
-      <button onClick={handleAddOrEdit}>{editId ? 'Update' : 'Add'} Product</button>
+        <div className="row mb-2">
+          <div className="col">
+            <input
+              type="number"
+              name="my_price"
+              className="form-control"
+              placeholder="My Price"
+              value={formData.my_price}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="col">
+            <input
+              type="number"
+              name="quantity"
+              className="form-control"
+              placeholder="Quantity"
+              value={formData.quantity}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="col">
+            <input
+              type="number"
+              name="market_price"
+              className="form-control"
+              placeholder="Market Price"
+              value={formData.market_price}
+              onChange={handleChange}
+              required
+            />
+          </div>
+        </div>
 
-      <table>
+        <button type="submit" className="btn btn-primary">
+          {editId ? "Update Product" : "Add Product"}
+        </button>
+      </form>
+
+      <table className="table table-bordered">
         <thead>
           <tr>
-            <th onClick={() => handleSort('category')}>Category</th>
-            <th onClick={() => handleSort('my_price')}>My Price</th>
-            <th onClick={() => handleSort('quantity')}>Quantity</th>
-            <th onClick={() => handleSort('market_price')}>Market Price</th>
+            <th>Category</th>
+            <th>Subcategory</th>
+            <th>My Price</th>
+            <th>Quantity</th>
+            <th>Market Price</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {products.map(p => (
+          {products.map((p) => (
             <tr key={p.id}>
               <td>{p.category}</td>
-              <td>{p.my_price}€</td>
+              <td>{p.subcategory}</td>
+              <td>{p.my_price}</td>
               <td>{p.quantity}</td>
-              <td>{p.market_price}€</td>
+              <td>{p.market_price}</td>
               <td>
-                <button onClick={() => handleEdit(p)}>✏️</button>
-                <button onClick={() => handleDelete(p.id)}>❌</button>
+                <button className="btn btn-sm btn-warning me-2" onClick={() => handleEdit(p)}>
+                  Edit
+                </button>
+                <button className="btn btn-sm btn-danger" onClick={() => handleDelete(p.id)}>
+                  Delete
+                </button>
               </td>
             </tr>
           ))}
