@@ -1,3 +1,5 @@
+// src/components/Auth/Login.js
+
 import React, { useState, useContext } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link, useNavigate } from 'react-router-dom';
@@ -11,7 +13,7 @@ function Login() {
   const [serverError, setServerError] = useState("");
   const navigate = useNavigate();
 
-  const { login } = useContext(UserContext); // 👈 обязательно подключаем login
+  const { login } = useContext(UserContext); // 👈 подключение login из контекста
 
   const handleInput = (event) => {
     setValues(prev => ({
@@ -29,8 +31,12 @@ function Login() {
       axios.post('http://localhost:8081/login', values)
         .then(res => {
           console.log("Login OK:", res.data);
-          login(res.data.name, res.data.id); // 👈 сохраняем имя и ID пользователя
-          navigate('/my-products');          // 👈 переходим на страницу товаров
+
+          // ✅ передаём is_admin как третий аргумент
+          login(res.data.name, res.data.id, res.data.is_admin);
+
+          // 🔒 редирект на страницу продуктов
+          navigate('/my-products');
         })
         .catch(err => {
           console.log("Login error:", err);
