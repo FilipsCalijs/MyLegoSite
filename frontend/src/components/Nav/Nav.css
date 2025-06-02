@@ -1,0 +1,79 @@
+.nav {
+    background-color: #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+  }
+  
+  .nav-list {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .nav-list li {
+    display: inline;
+  }
+  
+  .nav-list a {
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    transition: color 0.3s ease-in-out;
+  }
+  .auth-icon {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: white;
+  }
+  
+  .username-text {
+    font-weight: bold;
+    color: white;
+  }
+  
+  .nav-list a:hover {
+    color: #ffcc00;
+  }
+  
+  .auth-icon {
+    font-size: 24px;
+  }
+  
+  .auth-icon a {
+    text-decoration: none;
+    color: white;
+  }
+  
+
+  .auth-icon {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: white;
+  }
+  
+  .username-text {
+    font-weight: bold;
+    color: white;
+  }
+  
+  .logout-btn {
+    background: transparent;
+    border: 1px solid white;
+    color: white;
+    padding: 3px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+  }
+  
+  .logout-btn:hover {
+    background-color: white;
+    color: black;
+  }
+  
