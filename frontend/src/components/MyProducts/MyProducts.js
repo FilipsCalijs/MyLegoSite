@@ -12,7 +12,7 @@ function MyProducts() {
     subcategory: "",
     my_price: "",
     quantity: "",
-    market_price: ""
+    image_url: ""
   });
   const [editId, setEditId] = useState(null);
 
@@ -42,8 +42,6 @@ function MyProducts() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
-    // Reset subcategory when changing category
     if (name === "category") {
       setFormData(prev => ({
         ...prev,
@@ -60,11 +58,9 @@ function MyProducts() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     const url = editId
       ? `http://localhost:8081/update-product/${editId}`
       : "http://localhost:8081/add-product";
-
     const method = editId ? axios.put : axios.post;
 
     method(url, { ...formData, user_id: userId })
@@ -75,7 +71,7 @@ function MyProducts() {
           subcategory: "",
           my_price: "",
           quantity: "",
-          market_price: ""
+          image_url: ""
         });
         setEditId(null);
       })
@@ -88,7 +84,7 @@ function MyProducts() {
       subcategory: product.subcategory,
       my_price: product.my_price,
       quantity: product.quantity,
-      market_price: product.market_price
+      image_url: product.image_url
     });
     setEditId(product.id);
   };
@@ -167,13 +163,12 @@ function MyProducts() {
           </div>
           <div className="col">
             <input
-              type="number"
-              name="market_price"
+              type="text"
+              name="image_url"
               className="form-control"
-              placeholder="Market Price"
-              value={formData.market_price}
+              placeholder="Image URL"
+              value={formData.image_url}
               onChange={handleChange}
-              required
             />
           </div>
         </div>
@@ -190,7 +185,7 @@ function MyProducts() {
             <th>Subcategory</th>
             <th>My Price</th>
             <th>Quantity</th>
-            <th>Market Price</th>
+            <th>Image</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -201,7 +196,13 @@ function MyProducts() {
               <td>{p.subcategory}</td>
               <td>{p.my_price}</td>
               <td>{p.quantity}</td>
-              <td>{p.market_price}</td>
+              <td>
+                <img
+                  src={p.image_url || "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1200px-No-Image-Placeholder.svg.png"}
+                  alt="Product"
+                  style={{ width: "60px", height: "60px", objectFit: "cover" }}
+                />
+              </td>
               <td>
                 <button className="btn btn-sm btn-warning me-2" onClick={() => handleEdit(p)}>
                   Edit

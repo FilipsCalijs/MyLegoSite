@@ -8,6 +8,8 @@ import IntroHero from "./components/IntroHero/IntroHero";
 import MyProducts from "./components/MyProducts/MyProducts";
 import ManageProducts from "./components/Admin/ManageProducts";
 import CreateCategories from "./components/Admin/CreateCategories";
+import CategoryDetails from "./components/CategoryDetails";
+
 
 function ProtectedRoute({ children, adminOnly = false }) {
   const { userId, isAdmin } = React.useContext(UserContext);
@@ -27,7 +29,7 @@ function App() {
           <Route path="/" element={<IntroHero />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-
+          <Route path="/category/:id" element={<CategoryDetails />} />
           <Route
             path="/my-products"
             element={
