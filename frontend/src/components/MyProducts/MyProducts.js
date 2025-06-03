@@ -16,7 +16,6 @@ function MyProducts() {
   });
   const [editId, setEditId] = useState(null);
 
-  // Загрузка продуктов, категорий и подкатегорий
   useEffect(() => {
     fetchProducts();
     fetchCategories();
@@ -42,10 +41,21 @@ function MyProducts() {
   };
 
   const handleChange = (e) => {
-    setFormData(prev => ({
-      ...prev,
-      [e.target.name]: e.target.value
-    }));
+    const { name, value } = e.target;
+
+    // Reset subcategory when changing category
+    if (name === "category") {
+      setFormData(prev => ({
+        ...prev,
+        category: value,
+        subcategory: ""
+      }));
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        [name]: value
+      }));
+    }
   };
 
   const handleSubmit = (e) => {
@@ -89,6 +99,11 @@ function MyProducts() {
       .catch(err => console.error("Delete error", err));
   };
 
+  const getSelectedCategoryId = () => {
+    const selected = categories.find(c => c.name === formData.category);
+    return selected ? selected.id : null;
+  };
+
   return (
     <div className="container mt-4">
       <h2>My Products</h2>
@@ -118,8 +133,10 @@ function MyProducts() {
               required
             >
               <option value="">Select Subcategory</option>
-              {subcategories.map((s) => (
-                <option key={s.id} value={s.name}>{s.name}</option>
+              {subcategories
+                .filter(s => s.category_id === getSelectedCategoryId())
+                .map((s) => (
+                  <option key={s.id} value={s.name}>{s.name}</option>
               ))}
             </select>
           </div>

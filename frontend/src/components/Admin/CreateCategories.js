@@ -4,8 +4,11 @@ import axios from "axios";
 function CreateCategories() {
   const [categories, setCategories] = useState([]);
   const [newCategory, setNewCategory] = useState("");
+  const [newImageUrl, setNewImageUrl] = useState("");
+
   const [editCategoryId, setEditCategoryId] = useState(null);
   const [editCategoryName, setEditCategoryName] = useState("");
+  const [editImageUrl, setEditImageUrl] = useState("");
 
   const [subcategories, setSubcategories] = useState([]);
   const [newSubcategory, setNewSubcategory] = useState("");
@@ -30,11 +33,14 @@ function CreateCategories() {
 
   const handleAddCategory = () => {
     if (!newCategory) return;
-    axios.post("http://localhost:8081/add-category", { name: newCategory })
-      .then(() => {
-        setNewCategory("");
-        fetchCategories();
-      });
+    axios.post("http://localhost:8081/add-category", {
+      name: newCategory,
+      image_url: newImageUrl
+    }).then(() => {
+      setNewCategory("");
+      setNewImageUrl("");
+      fetchCategories();
+    });
   };
 
   const handleDeleteCategory = (id) => {
@@ -42,18 +48,22 @@ function CreateCategories() {
       .then(() => fetchCategories());
   };
 
-  const handleEditCategory = (id, name) => {
+  const handleEditCategory = (id, name, image_url) => {
     setEditCategoryId(id);
     setEditCategoryName(name);
+    setEditImageUrl(image_url || "");
   };
 
   const handleSaveEditedCategory = () => {
-    axios.put(`http://localhost:8081/edit-category/${editCategoryId}`, { name: editCategoryName })
-      .then(() => {
-        setEditCategoryId(null);
-        setEditCategoryName("");
-        fetchCategories();
-      });
+    axios.put(`http://localhost:8081/edit-category/${editCategoryId}`, {
+      name: editCategoryName,
+      image_url: editImageUrl
+    }).then(() => {
+      setEditCategoryId(null);
+      setEditCategoryName("");
+      setEditImageUrl("");
+      fetchCategories();
+    });
   };
 
   const handleAddSubcategory = () => {
@@ -78,12 +88,13 @@ function CreateCategories() {
   };
 
   const handleSaveEditedSubcategory = () => {
-    axios.put(`http://localhost:8081/edit-subcategory/${editSubcategoryId}`, { name: editSubcategoryName })
-      .then(() => {
-        setEditSubcategoryId(null);
-        setEditSubcategoryName("");
-        fetchSubcategories();
-      });
+    axios.put(`http://localhost:8081/edit-subcategory/${editSubcategoryId}`, {
+      name: editSubcategoryName
+    }).then(() => {
+      setEditSubcategoryId(null);
+      setEditSubcategoryName("");
+      fetchSubcategories();
+    });
   };
 
   return (
@@ -93,6 +104,11 @@ function CreateCategories() {
         placeholder="New Category"
         value={newCategory}
         onChange={e => setNewCategory(e.target.value)}
+      />
+      <input
+        placeholder="Image URL"
+        value={newImageUrl}
+        onChange={e => setNewImageUrl(e.target.value)}
       />
       <button onClick={handleAddCategory}>Add</button>
 
@@ -105,12 +121,17 @@ function CreateCategories() {
                   value={editCategoryName}
                   onChange={e => setEditCategoryName(e.target.value)}
                 />
+                <input
+                  value={editImageUrl}
+                  placeholder="Image URL"
+                  onChange={e => setEditImageUrl(e.target.value)}
+                />
                 <button onClick={handleSaveEditedCategory}>💾</button>
               </>
             ) : (
               <>
                 {cat.name}
-                <button onClick={() => handleEditCategory(cat.id, cat.name)}>✏️</button>
+                <button onClick={() => handleEditCategory(cat.id, cat.name, cat.image_url)}>✏️</button>
                 <button onClick={() => handleDeleteCategory(cat.id)}>❌</button>
               </>
             )}

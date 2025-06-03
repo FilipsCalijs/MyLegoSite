@@ -49,14 +49,14 @@ app.post('/login', (req, res) => {
 
 // Продукты
 app.post('/add-product', (req, res) => {
-  const { user_id, category, subcategory, my_price, quantity, market_price } = req.body;
+  const { user_id, category, subcategory, my_price, quantity, image_url } = req.body;
   if (!user_id || !category) return res.status(400).json("Missing data");
 
   const sql = `
-    INSERT INTO products (user_id, category, subcategory, my_price, quantity, market_price)
+    INSERT INTO products (user_id, category, subcategory, my_price, quantity, image_url)
     VALUES (?, ?, ?, ?, ?, ?)
   `;
-  const values = [user_id, category, subcategory, my_price, quantity, market_price];
+  const values = [user_id, category, subcategory, my_price, quantity, image_url];
   db.query(sql, values, (err) => {
     if (err) return res.status(500).json("Insert failed");
     res.status(200).json("Product added");
@@ -64,13 +64,13 @@ app.post('/add-product', (req, res) => {
 });
 
 app.put('/update-product/:id', (req, res) => {
-  const { category, subcategory, my_price, quantity, market_price } = req.body;
+  const { category, subcategory, my_price, quantity, image_url } = req.body;
   const sql = `
     UPDATE products
-    SET category = ?, subcategory = ?, my_price = ?, quantity = ?, market_price = ?
+    SET category = ?, subcategory = ?, my_price = ?, quantity = ?, image_url = ?
     WHERE id = ?
   `;
-  const values = [category, subcategory, my_price, quantity, market_price, req.params.id];
+  const values = [category, subcategory, my_price, quantity, image_url, req.params.id];
   db.query(sql, values, (err) => {
     if (err) return res.status(500).json("Update failed");
     res.status(200).json("Product updated");
@@ -99,21 +99,18 @@ app.get('/all-products', (req, res) => {
 });
 
 // Категории
+// Добавление категории
 app.post('/add-category', (req, res) => {
-  const { name } = req.body;
+  const { name, image_url } = req.body;
   if (!name) return res.status(400).json("Missing name");
-  db.query("INSERT INTO categories (name) VALUES (?)", [name], (err) => {
+  db.query("INSERT INTO categories (name, image_url) VALUES (?, ?)", [name, image_url], (err) => {
     if (err) return res.status(500).json("Insert failed");
     res.status(200).json("Category added");
   });
 });
 
-app.get('/categories', (req, res) => {
-  db.query("SELECT * FROM categories", (err, rows) => {
-    if (err) return res.status(500).json("Error");
-    res.status(200).json(rows);
-  });
-});
+
+
 
 app.delete('/delete-category/:id', (req, res) => {
   const id = req.params.id;
@@ -182,15 +179,7 @@ app.listen(8081, () => {
   console.log("🚀 Server listening on port 8081");
 });
 
-// Обновить категорию
-app.put('/edit-category/:id', (req, res) => {
-  const { name } = req.body;
-  const id = req.params.id;
-  db.query("UPDATE categories SET name = ? WHERE id = ?", [name, id], (err) => {
-    if (err) return res.status(500).json("Update failed");
-    res.status(200).json("Category updated");
-  });
-});
+
 
 // Обновить подкатегорию
 app.put('/edit-subcategory/:id', (req, res) => {
@@ -256,6 +245,32 @@ app.put('/update-product/:id', (req, res) => {
       return res.status(500).json({ error: "Failed to update product" });
     }
     res.json({ message: "✅ Product updated" });
+  });
+});
+// Редактировать категорию
+app.put('/edit-category/:id', (req, res) => {
+  const { name, image_url } = req.body;
+  const sql = "UPDATE categories SET name = ?, image_url = ? WHERE id = ?";
+  db.query(sql, [name, image_url, req.params.id], (err) => {
+    if (err) return res.status(500).json("Update failed");
+    res.status(200).json("Category updated");
+  });
+});
+
+app.get('/categories', (req, res) => {
+  db.query("SELECT * FROM categories", (err, rows) => {
+    if (err) return res.status(500).json("Error");
+    res.status(200).json(rows);
+  });
+});
+
+
+app.post('/add-category', (req, res) => {
+  const { name, image_url } = req.body;
+  if (!name || !image_url) return res.status(400).json("Missing data");
+  db.query("INSERT INTO categories (name, image_url) VALUES (?, ?)", [name, image_url], (err) => {
+    if (err) return res.status(500).json("Insert failed");
+    res.status(200).json("Category added");
   });
 });
 
