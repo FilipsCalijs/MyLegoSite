@@ -1,24 +1,26 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 
 function CategoryDetails() {
   const { id } = useParams();
   const [subcategories, setSubcategories] = useState([]);
-  const [search, setSearch] = useState("");
-  const [sort, setSort] = useState("name");
+  const [sortOption, setSortOption] = useState("A-Z");
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     axios.get(`http://localhost:8081/subcategories-by-category/${id}`)
       .then(res => setSubcategories(res.data))
-      .catch(err => console.error("Subcategory load error", err));
+      .catch(err => console.error("Failed to load subcategories", err));
   }, [id]);
 
-  const filtered = subcategories
-    .filter(sub => sub.name.toLowerCase().includes(search.toLowerCase()))
+  const sortedAndFiltered = subcategories
+    .filter(sub => sub.name.toLowerCase().includes(searchTerm.toLowerCase()))
     .sort((a, b) => {
-      if (sort === "name") return a.name.localeCompare(b.name);
-      if (sort === "count") return b.count - a.count;
+      if (sortOption === "A-Z") return a.name.localeCompare(b.name);
+      if (sortOption === "Z-A") return b.name.localeCompare(a.name);
+      if (sortOption === "Most items") return b.count - a.count;
+      if (sortOption === "Least items") return a.count - b.count;
       return 0;
     });
 
@@ -29,29 +31,32 @@ function CategoryDetails() {
       <input
         type="text"
         placeholder="Search subcategories..."
-        className="form-control mb-2"
-        value={search}
-        onChange={e => setSearch(e.target.value)}
+        className="form-control mb-3"
+        value={searchTerm}
+        onChange={e => setSearchTerm(e.target.value)}
       />
 
-      <div className="mb-2">
-        <label className="me-2">Sort by:</label>
+      <div className="mb-3">
+        <label>Sort by: </label>
         <select
-          value={sort}
-          onChange={e => setSort(e.target.value)}
           className="form-select"
-          style={{ width: "200px", display: "inline-block" }}
+          style={{ width: "200px", display: "inline-block", marginLeft: "10px" }}
+          value={sortOption}
+          onChange={e => setSortOption(e.target.value)}
         >
-          <option value="name">A-Z</option>
-          <option value="count">By usage count</option>
+          <option value="A-Z">A-Z</option>
+          <option value="Z-A">Z-A</option>
+          <option value="Most items">Most items</option>
+          <option value="Least items">Least items</option>
         </select>
       </div>
 
       <ul className="list-group">
-        {filtered.map(sub => (
-          <li key={sub.id} className="list-group-item d-flex justify-content-between">
-            {sub.name}
-            <span className="badge bg-secondary">{sub.count}</span>
+        {sortedAndFiltered.map(sub => (
+          <li key={sub.id} className="list-group-item">
+            <Link to={`/subcategory/${sub.id}`}>
+              {sub.name} ({sub.count})
+            </Link>
           </li>
         ))}
       </ul>

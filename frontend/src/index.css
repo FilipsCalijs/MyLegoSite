@@ -11,3 +11,53 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+
+
+  /* Custom modal styles */
+  .custom-modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.25);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .custom-modal-window {
+    background: #fff;
+    border-radius: 16px;
+    max-width: 520px;
+    width: 96%;
+    padding: 28px 34px 28px 34px;
+    box-shadow: 0 8px 36px #0002;
+    position: relative;
+  }
+  
+  .custom-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 1.4em;
+    font-weight: 700;
+    margin-bottom: 15px;
+  }
+  
+  .custom-modal-close {
+    background: none;
+    border: none;
+    font-size: 1.7em;
+    cursor: pointer;
+    color: #555;
+    padding: 0 6px;
+    transition: color 0.2s;
+  }
+  .custom-modal-close:hover {
+    color: #c00;
+  }
+  
+  .custom-modal-body {
+    font-size: 1.13em;
+  }
+  

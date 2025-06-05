@@ -1,26 +1,36 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import './HomeCategories.css';
-
-function HomeCategories() {
-  const [categories, setCategories] = useState([]);
-
-  useEffect(() => {
-    axios.get("http://localhost:8081/categories")
-      .then(res => setCategories(res.data))
-      .catch(err => console.error("Fetch categories error:", err));
-  }, []);
-
-  return (
-    <div className="home-categories">
-      {categories.map(cat => (
-        <div key={cat.id} className="category-card">
-          <img src={cat.image_url} alt={cat.name} />
-          <h3>{cat.name}</h3>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-export default HomeCategories;
+.home-categories {
+    padding: 40px;
+    text-align: center;
+  }
+  
+  .category-grid {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .category-card {
+    width: 200px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 0 8px rgba(0,0,0,0.1);
+    transition: 0.3s;
+  }
+  
+  .category-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .category-card img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+  }
+  
+  .category-card p {
+    margin: 10px;
+    font-weight: bold;
+  }
+  

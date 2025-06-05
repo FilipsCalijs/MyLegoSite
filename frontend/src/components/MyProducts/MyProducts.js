@@ -8,6 +8,7 @@ function MyProducts() {
   const [categories, setCategories] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
   const [formData, setFormData] = useState({
+    name: "",
     category: "",
     subcategory: "",
     my_price: "",
@@ -58,15 +59,18 @@ function MyProducts() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     const url = editId
       ? `http://localhost:8081/update-product/${editId}`
       : "http://localhost:8081/add-product";
+
     const method = editId ? axios.put : axios.post;
 
     method(url, { ...formData, user_id: userId })
       .then(() => {
         fetchProducts();
         setFormData({
+          name: "",
           category: "",
           subcategory: "",
           my_price: "",
@@ -80,11 +84,12 @@ function MyProducts() {
 
   const handleEdit = (product) => {
     setFormData({
+      name: product.name,
       category: product.category,
       subcategory: product.subcategory,
       my_price: product.my_price,
       quantity: product.quantity,
-      image_url: product.image_url
+      image_url: product.image_url || ""
     });
     setEditId(product.id);
   };
@@ -106,6 +111,17 @@ function MyProducts() {
 
       <form onSubmit={handleSubmit} className="mb-4">
         <div className="row mb-2">
+          <div className="col">
+            <input
+              type="text"
+              name="name"
+              className="form-control"
+              placeholder="Figure Name"
+              value={formData.name}
+              onChange={handleChange}
+              required
+            />
+          </div>
           <div className="col">
             <select
               name="category"
@@ -181,6 +197,7 @@ function MyProducts() {
       <table className="table table-bordered">
         <thead>
           <tr>
+            <th>Figure</th>
             <th>Category</th>
             <th>Subcategory</th>
             <th>My Price</th>
@@ -192,6 +209,7 @@ function MyProducts() {
         <tbody>
           {products.map((p) => (
             <tr key={p.id}>
+              <td>{p.name}</td>
               <td>{p.category}</td>
               <td>{p.subcategory}</td>
               <td>{p.my_price}</td>
@@ -199,8 +217,8 @@ function MyProducts() {
               <td>
                 <img
                   src={p.image_url || "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1200px-No-Image-Placeholder.svg.png"}
-                  alt="Product"
-                  style={{ width: "60px", height: "60px", objectFit: "cover" }}
+                  alt="figure"
+                  style={{ width: 50, height: 50, objectFit: "cover" }}
                 />
               </td>
               <td>

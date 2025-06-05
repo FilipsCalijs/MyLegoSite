@@ -1,79 +1,121 @@
 .nav {
-    background-color: #333;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 20px;
-  }
-  
-  .nav-list {
-    list-style: none;
-    display: flex;
-    gap: 20px;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .nav-list li {
-    display: inline;
-  }
-  
-  .nav-list a {
-    text-decoration: none;
-    color: white;
-    font-weight: bold;
-    transition: color 0.3s ease-in-out;
-  }
-  .auth-icon {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    color: white;
-  }
-  
-  .username-text {
-    font-weight: bold;
-    color: white;
-  }
-  
-  .nav-list a:hover {
-    color: #ffcc00;
-  }
-  
-  .auth-icon {
-    font-size: 24px;
-  }
-  
-  .auth-icon a {
-    text-decoration: none;
-    color: white;
-  }
-  
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #292929;
+  color: #fff;
+  padding: 10px 40px;
+  font-family: inherit;
+}
 
-  .auth-icon {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: white;
-  }
-  
-  .username-text {
-    font-weight: bold;
-    color: white;
-  }
-  
-  .logout-btn {
-    background: transparent;
-    border: 1px solid white;
-    color: white;
-    padding: 3px 8px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.8rem;
-  }
-  
-  .logout-btn:hover {
-    background-color: white;
-    color: black;
-  }
-  
+.nav-logo img {
+  vertical-align: middle;
+}
+
+.nav-list {
+  display: flex;
+  gap: 30px;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-list li {
+  position: relative;
+  font-size: 1.05em;
+  font-weight: 600;
+}
+
+.nav-list li a, .nav-list li span {
+  text-decoration: none;
+  color: #fff;
+  padding: 7px 10px;
+  border-radius: 4px;
+  transition: background .18s, color .18s;
+}
+
+.nav-list li a.active-link {
+  color: #1565c0;
+  background: #fff;
+}
+
+.nav-list li a:hover, .nav-list li span:hover {
+  background: #222;
+  color: #ffa000;
+}
+
+.nav-admin-menu .admin-dropdown {
+  position: absolute;
+  left: 0;
+  top: 32px;
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px #0002;
+  min-width: 180px;
+  z-index: 100;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.nav-admin-menu .admin-dropdown li {
+  margin: 0;
+  padding: 0;
+}
+.nav-admin-menu .admin-dropdown li a {
+  display: block;
+  padding: 13px 18px;
+  color: #222;
+  text-decoration: none;
+  font-size: 1em;
+  border-radius: 0;
+  transition: background .18s, color .18s;
+}
+.nav-admin-menu .admin-dropdown li a:hover, .nav-admin-menu .admin-dropdown li a.active-link {
+  background: #f6f6f6;
+  color: #1565c0;
+}
+
+.auth-links {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+
+.nav-auth-link {
+  color: #fff;
+  text-decoration: none;
+  padding: 5px 13px;
+  background: #0d47a1;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 1em;
+  transition: background .22s;
+}
+.nav-auth-link:hover {
+  background: #1565c0;
+}
+
+.username-text {
+  color: #ffe082;
+  font-size: 1.1em;
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+.logout-btn {
+  padding: 4px 14px;
+  background: #222;
+  border: 1px solid #fff;
+  color: #fff;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background .22s;
+}
+.logout-btn:hover {
+  background: #c62828;
+  color: #fff;
+}

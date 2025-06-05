@@ -1,76 +1,142 @@
 .hero {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    /* background: url('/assets/hero-bg.jpg') no-repeat center center/cover; */
-    height: 60vh;
-    color: white;
-    padding: 20px;
-  }
-  
-  .hero-content {
-    background: rgba(0, 0, 0, 0.6);
-    padding: 20px;
-    border-radius: 10px;
-  }
-  
-  .hero h1 {
-    font-size: 2.5rem;
-    margin-bottom: 10px;
-  }
-  
-  .hero p {
-    font-size: 1.2rem;
-    margin-bottom: 20px;
-  }
-  
-  .hero-btn {
-    display: inline-block;
-    padding: 10px 20px;
-    background: #ffcc00;
-    color: #333;
-    text-decoration: none;
-    font-weight: bold;
-    border-radius: 5px;
-    transition: background 0.3s ease;
-  }
-  
-  .hero-btn:hover {
-    background: #e6b800;
-  }
-  
+  text-align: center;
+  padding: 30px 10px 20px 10px;
+  background: #faf8fa;
+}
+.hero-content {
+  margin: 0 auto 30px auto;
+  max-width: 540px;
+  background: #fff3;
+  border-radius: 14px;
+  padding: 32px;
+  box-shadow: 0 4px 16px 0 #0001;
+}
 
-  .hero {
-    text-align: center;
-    padding: 30px;
-    background-color: #f5f5f5;
-  }
-  
-  .hero-content h1 {
-    font-size: 2.5em;
-  }
-  
-  .category-grid {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 25px;
-    padding: 30px;
-  }
-  
-  .category-card {
-    background: white;
-    padding: 15px;
-    width: 180px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  }
-  
-  .category-card img {
-    width: 100%;
-    height: 140px;
-    object-fit: cover;
-    border-radius: 4px;
-  }
-  
+.categories-section {
+  margin: 0 0 30px 0;
+  padding: 0 0 15px 0;
+  background: #faf8fa;
+}
+.categories-section h2 {
+  margin-left: 40px;
+  font-size: 1.6rem;
+  font-weight: 600;
+}
+.category-slider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+.slider-btn {
+  background: #fff;
+  border: 1px solid #ccc;
+  font-size: 2em;
+  width: 48px;
+  height: 160px;
+  padding: 0;
+  cursor: pointer;
+  border-radius: 12px;
+  margin: 0 3px;
+  transition: background .25s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+}
+.slider-btn:active { background: #eee; }
+.category-grid {
+  display: flex;
+  gap: 32px;
+  overflow-x: auto;
+  padding: 14px 0;
+  scroll-behavior: smooth;
+  min-width: 0;
+  max-width: 980px;
+}
+.category-card {
+  background: white;
+  padding: 22px;
+  width: 240px;
+  min-width: 240px;
+  border-radius: 16px;
+  box-shadow: 0 4px 14px #0001;
+  text-align: center;
+  text-decoration: none;
+  color: #333;
+  transition: box-shadow .2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.category-card:hover {
+  box-shadow: 0 4px 24px #0002;
+  color: #1a64bc;
+}
+.category-card img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 14px;
+}
+
+/* Latest Released Section */
+.latest-posts-section {
+  padding: 22px 10px 32px 10px;
+  background: #f6f8fd;
+}
+.latest-posts-section h2 {
+  margin-bottom: 15px;
+  font-size: 1.3em;
+}
+.latest-posts-slider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.latest-posts-grid {
+  display: flex;
+  gap: 36px;
+  overflow-x: auto;
+  padding: 16px 0;
+  scroll-behavior: smooth;
+  min-width: 0;
+  max-width: 1100px;
+}
+.post-card {
+  flex: 0 0 320px;
+  max-width: 340px;
+  min-width: 320px;
+  padding: 24px 20px 16px 20px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 18px #0001;
+  text-decoration: none;
+  color: #2b2b2b;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 8px;
+  transition: box-shadow .22s;
+}
+.post-card:hover {
+  box-shadow: 0 8px 24px #0002;
+  color: #115bbc;
+}
+.post-title { font-size: 1.15em; font-weight: 600; margin-bottom: 6px; }
+.post-tags { margin-bottom: 6px; }
+.post-tag {
+  background: #f0f5ff;
+  color: #2676cc;
+  border-radius: 6px;
+  font-size: 1em;
+  padding: 2px 11px;
+  margin-right: 7px;
+}
+.post-meta { font-size: .98em; color: #555; }
+.empty-posts {
+  color: #999;
+  font-style: italic;
+  padding: 24px;
+}
