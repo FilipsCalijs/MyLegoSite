@@ -33,14 +33,54 @@ function ManageTags() {
     setEditName(name);
   };
 
-  const saveEdit = () => {
-    axios.put(`http://localhost:8081/tags/${editId}`, { name: editName }, { withCredentials: true })
-      .then(() => {
-        setEditId(null);
-        setEditName("");
-        fetchTags();
-      });
+  const saveEdit = async () => {
+    const oldTag = tags.find(t => t.id === editId)?.name;
+    const newTag = editName.trim();
+  
+    if (!oldTag || !newTag || oldTag === newTag) return;
+  
+    try {
+      // 1. Обновить тег в таблице `tags`
+      await axios.put(`http://localhost:8081/tags/${editId}`, { name: newTag }, { withCredentials: true });
+  
+      // 2. Получить все посты
+      const res = await axios.get("http://localhost:8081/posts");
+      const posts = res.data;
+  
+      // 3. Фильтруем посты, в которых есть oldTag
+      const postsToUpdate = posts.filter(post =>
+        typeof post.tags === "string" && post.tags.split(",").map(t => t.trim()).includes(oldTag)
+      );
+  
+      // 4. Обновляем каждый такой пост
+      for (const post of postsToUpdate) {
+        const updatedTags = post.tags
+          .split(",")
+          .map(t => t.trim() === oldTag ? newTag : t.trim())
+          .filter(Boolean)
+          .join(",");
+  
+        await axios.put(`http://localhost:8081/posts/${post.id}`, {
+          title: post.title,
+          tags: updatedTags,
+          body: post.body,
+          user_id: post.user_id // обязательно, иначе backend отклонит
+        }, { withCredentials: true });
+      }
+  
+      // 5. Сброс формы
+      setEditId(null);
+      setEditName("");
+      fetchTags();
+  
+    } catch (err) {
+      console.error("❌ Ошибка при обновлении тега или постов", err);
+      alert("Failed to update tag or related posts.");
+    }
   };
+  
+  
+  
 
   const deleteTag = id => {
     if (!window.confirm("Delete this tag?")) return;

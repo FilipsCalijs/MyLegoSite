@@ -193,7 +193,7 @@ function MyProducts() {
           {editId ? "Update Product" : "Add Product"}
         </button>
       </form>
-
+     <div style={{ overflowX: "auto" }}>
       <table className="table table-bordered">
         <thead>
           <tr>
@@ -209,7 +209,11 @@ function MyProducts() {
         <tbody>
           {products.map((p) => (
             <tr key={p.id}>
-              <td>{p.name}</td>
+              <td style={{ maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={p.name}>
+  {p.name}
+</td>
+
+
               <td>{p.category}</td>
               <td>{p.subcategory}</td>
               <td>{p.my_price}</td>
@@ -233,6 +237,7 @@ function MyProducts() {
           ))}
         </tbody>
       </table>
+      </div>
     </div>
   );
 }

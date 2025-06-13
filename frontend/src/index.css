@@ -60,4 +60,51 @@ code {
   .custom-modal-body {
     font-size: 1.13em;
   }
+
+  /* index.css (глобальный сброс, ДО любых других стилей) */
+
+html, body, #root {
+  width: 100vw;
+  min-width: 0;
+  max-width: 100vw;
+  overflow-x: hidden !important;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background: #faf8fa;
+}
+
+/* Убираем все возможные отступы и скроллы */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  overflow-x: hidden !important;
+}
+
+#root {
+  width: 100vw;
+  max-width: 100vw;
+  overflow-x: hidden !important;
+}
+
+/* Если что-то внутри layout или container — тоже сбрасываем */
+.container, .main, .app, .wrapper {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+/* Блокируем горизонтальный скролл даже если flex-box или grid что-то ломают */
+::-webkit-scrollbar {
+  height: 8px;
+  background: #f0f0f0;
+}
+
+
+
+
   

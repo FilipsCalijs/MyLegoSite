@@ -6,11 +6,11 @@ const app = express();
 app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
 app.use(express.json());
 
-// MYSQL CONNECT
+
 const db = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "root", // или твой пароль
+  password: "root", 
   database: "signup"
 });
 db.connect(err => {
@@ -18,15 +18,31 @@ db.connect(err => {
   else console.log("✅ MYSQL CONNECTED");
 });
 
-// --- Пользователи ---
+
 app.post('/signup', (req, res) => {
-  const sql = "INSERT INTO login (Name, Email, Password, is_admin) VALUES (?, ?, ?, false)";
-  const values = [req.body.name, req.body.email, req.body.password];
-  db.query(sql, values, (err) => {
+  const { name, email, password } = req.body;
+
+  if (!name || !email || !password) {
+    return res.status(400).json("Missing data");
+  }
+
+
+  db.query("SELECT * FROM login WHERE Email = ?", [email], (err, results) => {
     if (err) return res.status(500).json("DB error");
-    res.status(200).json("Success");
+
+    if (results.length > 0) {
+      return res.status(409).json("Email already registered");
+    }
+
+
+    const sql = "INSERT INTO login (Name, Email, Password, is_admin) VALUES (?, ?, ?, false)";
+    db.query(sql, [name, email, password], (err) => {
+      if (err) return res.status(500).json("DB insert error");
+      res.status(200).json("Success");
+    });
   });
 });
+
 app.post('/login', (req, res) => {
   const sql = "SELECT * FROM login WHERE Email = ? AND Password = ?";
   db.query(sql, [req.body.email, req.body.password], (err, data) => {
@@ -431,3 +447,19 @@ app.get('/products-by-subcategory/:subcat_id', (req, res) => {
     res.status(200).json(rows);
   });
 });
+const handleReportSubmit = (e) => {
+  e.preventDefault();
+  const data = {
+    name: e.target.name.value,
+    email: e.target.email.value,
+    message: e.target.message.value
+  };
+  axios.post("http://localhost:8081/api/contact", data)
+    .then(() => {
+      alert("Your report has been sent!");
+      e.target.reset();
+    })
+    .catch(() => {
+      alert("Error sending report");
+    });
+};

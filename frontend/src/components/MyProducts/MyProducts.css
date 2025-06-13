@@ -1,0 +1,50 @@
+/* Общие стили для мобильных */
+@media (max-width: 400px) {
+    .container {
+      padding: 10px;
+      text-align: center;
+    }
+  
+    form .row {
+      flex-direction: column;
+      gap: 10px;
+    }
+  
+    .form-control {
+      width: 100% !important;
+    }
+  
+    .btn {
+      width: 100%;
+      margin-top: 10px;
+    }
+  
+    table {
+      display: block;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+  
+    th, td {
+      font-size: 13px;
+      white-space: nowrap;
+    }
+  }
+  
+  /* Для обрезки названия и троеточия */
+  .truncate-text {
+    max-width: 250px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  
+  .truncate-text {
+    max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  

@@ -5,9 +5,15 @@ function ManageProducts() {
   const [products, setProducts] = useState([]);
   const [editingId, setEditingId] = useState(null);
   const [editedProduct, setEditedProduct] = useState({});
+  const [categories, setCategories] = useState([]);
+  const [subcategories, setSubcategories] = useState([]);
 
   useEffect(() => {
     fetchAllProducts();
+    axios.get("http://localhost:8081/categories")
+      .then(res => setCategories(res.data));
+    axios.get("http://localhost:8081/subcategories")
+      .then(res => setSubcategories(res.data));
   }, []);
 
   const fetchAllProducts = () => {
@@ -47,31 +53,104 @@ function ManageProducts() {
     setEditedProduct({});
   };
 
+  const getCategoryIdByName = (name) => {
+    const found = categories.find(c => c.name === name);
+    return found ? found.id : null;
+  };
+
   return (
-    <div>
+    <div style={{ maxWidth: "900px", margin: "0 auto", padding: "20px", textAlign: "center" }}>
       <h2>🛠️ Manage All Products</h2>
-      <ul>
-        {products.map(p => (
-          <li key={p.id}>
-            {editingId === p.id ? (
-              <>
-                <input name="category" value={editedProduct.category} onChange={handleInputChange} placeholder="Category" />
-                <input name="my_price" value={editedProduct.my_price} onChange={handleInputChange} placeholder="My Price" />
-                <input name="quantity" value={editedProduct.quantity} onChange={handleInputChange} placeholder="Quantity" />
-                <input name="market_price" value={editedProduct.market_price} onChange={handleInputChange} placeholder="Market Price" />
-                <button onClick={() => handleSave(p.id)}>💾</button>
-                <button onClick={handleCancel}>↩️</button>
-              </>
-            ) : (
-              <>
-                {p.category} — {p.my_price}€ ({p.quantity}) | {p.market_price}€
-                <button onClick={() => handleEditClick(p)}>✏️</button>
-                <button onClick={() => handleDelete(p.id)}>❌</button>
-              </>
-            )}
-          </li>
-        ))}
-      </ul>
+      <table style={{ width: "100%", borderCollapse: "collapse" }}>
+        <thead>
+          <tr style={{ backgroundColor: "#f0f0f0" }}>
+            <th style={{ padding: "8px", border: "1px solid #ccc" }}>Figure Name</th>
+            <th style={{ padding: "8px", border: "1px solid #ccc" }}>Category</th>
+            <th style={{ padding: "8px", border: "1px solid #ccc" }}>Subcategory</th>
+            <th style={{ padding: "8px", border: "1px solid #ccc" }}>My Price (€)</th>
+            <th style={{ padding: "8px", border: "1px solid #ccc" }}>Quantity</th>
+            <th style={{ padding: "8px", border: "1px solid #ccc" }}>Image</th>
+            <th style={{ padding: "8px", border: "1px solid #ccc" }}>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {products.map((p) => (
+            <tr key={p.id}>
+              {editingId === p.id ? (
+                <>
+                  <td style={{ padding: "8px", border: "1px solid #ccc" }}>
+                    <input name="name" value={editedProduct.name} onChange={handleInputChange} />
+                  </td>
+
+                  <td style={{ padding: "8px", border: "1px solid #ccc" }}>
+                    <select
+                      name="category"
+                      value={editedProduct.category}
+                      onChange={handleInputChange}
+                      className="form-select"
+                    >
+                      {categories.map(cat => (
+                        <option key={cat.id} value={cat.name}>{cat.name}</option>
+                      ))}
+                    </select>
+                  </td>
+
+                  <td style={{ padding: "8px", border: "1px solid #ccc" }}>
+                    <select
+                      name="subcategory"
+                      value={editedProduct.subcategory}
+                      onChange={handleInputChange}
+                      className="form-select"
+                    >
+                      {subcategories
+                        .filter(sub => sub.category_id === getCategoryIdByName(editedProduct.category))
+                        .map(sub => (
+                          <option key={sub.id} value={sub.name}>{sub.name}</option>
+                        ))}
+                    </select>
+                  </td>
+
+                  <td style={{ padding: "8px", border: "1px solid #ccc" }}>
+                    <input name="my_price" type="number" value={editedProduct.my_price} onChange={handleInputChange} />
+                  </td>
+
+                  <td style={{ padding: "8px", border: "1px solid #ccc" }}>
+                    <input name="quantity" type="number" value={editedProduct.quantity} onChange={handleInputChange} />
+                  </td>
+
+                  <td style={{ padding: "8px", border: "1px solid #ccc" }}>
+                    <input name="image_url" value={editedProduct.image_url} onChange={handleInputChange} />
+                  </td>
+
+                  <td style={{ padding: "8px", border: "1px solid #ccc" }}>
+                    <button onClick={() => handleSave(p.id)}>💾</button>{" "}
+                    <button onClick={handleCancel}>↩️</button>
+                  </td>
+                </>
+              ) : (
+                <>
+                  <td style={{ padding: "8px", border: "1px solid #ccc" }}>{p.name}</td>
+                  <td style={{ padding: "8px", border: "1px solid #ccc" }}>{p.category}</td>
+                  <td style={{ padding: "8px", border: "1px solid #ccc" }}>{p.subcategory}</td>
+                  <td style={{ padding: "8px", border: "1px solid #ccc" }}>{p.my_price}€</td>
+                  <td style={{ padding: "8px", border: "1px solid #ccc" }}>{p.quantity}</td>
+                  <td style={{ padding: "8px", border: "1px solid #ccc" }}>
+                    <img
+                      src={p.image_url || "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1200px-No-Image-Placeholder.svg.png"}
+                      alt="figure"
+                      style={{ width: "50px", height: "50px", objectFit: "cover" }}
+                    />
+                  </td>
+                  <td style={{ padding: "8px", border: "1px solid #ccc" }}>
+                    <button onClick={() => handleEditClick(p)}>✏️</button>{" "}
+                    <button onClick={() => handleDelete(p.id)}>❌</button>
+                  </td>
+                </>
+              )}
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }

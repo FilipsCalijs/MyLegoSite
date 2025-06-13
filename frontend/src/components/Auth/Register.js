@@ -14,15 +14,25 @@ const Register = () => {
   const navigate = useNavigate();
   const [errors, setErrors] = useState([])
   const handleInput = (event) => {
+    const { name, value } = event.target;
     setValues(prev => ({
       ...prev,
-      [event.target.name]: event.target.value
+      [name]: value
     }));
-  }
+  
+    // Очищаем email-ошибку при любом изменении email
+    if (name === "email") {
+      setErrors(prev => ({
+        ...prev,
+        email: ""
+      }));
+    }
+  };
+  
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
+  
     const validationErrors = Validation(values);
     setErrors(validationErrors);
   
@@ -31,21 +41,32 @@ const Register = () => {
       validationErrors.email === "" &&
       validationErrors.password === ""
     ) {
-      console.log("Sending:", values);  // ← обязательно, чтобы видеть в консоли
+      console.log("Sending:", values);
   
       axios.post('http://localhost:8081/signup', values)
         .then(res => {
-          console.log("Response:", res.data);  // ← для отладки
+          console.log("Response:", res.data);
           navigate('/');
         })
         .catch(err => {
-          console.log("AXIOS ERROR:", err);  // ← покажет ошибку, если сервер не отвечает
+          console.log("AXIOS ERROR:", err);
+          if (err.response && err.response.status === 409) {
+            // Добавляем кастомную ошибку прямо в errors
+            setErrors(prev => ({
+              ...prev,
+              email: "This email is already registered"
+            }));
+          } else {
+            alert("Something went wrong. Please try again later.");
+          }
         });
     }
-  }  
+  };
+   
   return (
     <div className='d-flex justify-content-center align-items-center bg-primary vh-100'>
-      <div className='bg-white p-3 rounded w-25'>
+      <div className='bg-white p-3 rounded w-100' style={{ maxWidth: "400px" }}>
+
         <h2>Register</h2>
         
         <form action="" onSubmit={handleSubmit}>

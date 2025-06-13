@@ -47,7 +47,8 @@ function Login() {
 
   return (
     <div className='d-flex justify-content-center align-items-center bg-primary vh-100'>
-      <div className='bg-white p-3 rounded w-25'>
+      <div className='bg-white p-3 rounded w-100' style={{ maxWidth: "400px" }}>
+
         <h2>Login</h2>
         <form onSubmit={handleSubmit}>
           <div className='mb-3'>

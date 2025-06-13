@@ -59,7 +59,7 @@ function App() {
           } />
 
           <Route path="/category/:id" element={<CategoryDetails />} />
-          <Route path="/subcategory/:id" element={<SubcategoryProducts />} />
+          <Route path="/subcategory/:id" element={<SubcategoryProducts />} /> 
           <Route path="/contact" element={<Contact />} />
 
           {/* --- Blog --- */}

@@ -1,121 +1,228 @@
+/* NAVIGATION STYLES */
+
 .nav {
+  background: #222;
+  color: #fff;
+  padding: 0 30px;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #292929;
-  color: #fff;
-  padding: 10px 40px;
-  font-family: inherit;
+  position: relative;
+  z-index: 100;
 }
 
 .nav-logo img {
+  height: 42px;
+  margin-right: 16px;
   vertical-align: middle;
 }
 
 .nav-list {
   display: flex;
-  gap: 30px;
   align-items: center;
+  gap: 22px;
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
-.nav-list li {
+.nav-list > li {
   position: relative;
-  font-size: 1.05em;
+  font-size: 1.45em;
   font-weight: 600;
 }
 
-.nav-list li a, .nav-list li span {
-  text-decoration: none;
+.nav-list > li > a,
+.nav-list > li > span {
   color: #fff;
-  padding: 7px 10px;
-  border-radius: 4px;
-  transition: background .18s, color .18s;
+  text-decoration: none;
+  border-radius: 8px;
+  padding: 7px 20px;
+  display: block;
+  transition: background 0.15s, color 0.15s;
 }
 
-.nav-list li a.active-link {
-  color: #1565c0;
+.nav-list > li > .active-link,
+.nav-list > li > span.active-link {
   background: #fff;
+  color: #f9a825;
+  box-shadow: 0 0 0 2px #f9a825;
 }
 
-.nav-list li a:hover, .nav-list li span:hover {
-  background: #222;
-  color: #ffa000;
+.nav-list > li > span,
+.nav-list > li > a {
+  cursor: pointer;
 }
 
-.nav-admin-menu .admin-dropdown {
+/* Dropdown menu */
+.admin-dropdown,
+.blog-dropdown {
+  display: block;
   position: absolute;
   left: 0;
-  top: 32px;
-  background: #fff;
-  border: 1px solid #eee;
-  border-radius: 8px;
-  box-shadow: 0 2px 12px #0002;
-  min-width: 180px;
-  z-index: 100;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-.nav-admin-menu .admin-dropdown li {
-  margin: 0;
-  padding: 0;
-}
-.nav-admin-menu .admin-dropdown li a {
-  display: block;
-  padding: 13px 18px;
-  color: #222;
-  text-decoration: none;
-  font-size: 1em;
-  border-radius: 0;
-  transition: background .18s, color .18s;
-}
-.nav-admin-menu .admin-dropdown li a:hover, .nav-admin-menu .admin-dropdown li a.active-link {
-  background: #f6f6f6;
-  color: #1565c0;
+  top: 100%;
+  min-width: 260px;
+  background: #222;
+  border-radius: 18px;
+  box-shadow: 0 12px 38px #0002, 0 1px 4px #0002;
+  padding: 8 20 ;
+  z-index: 1000;
+  opacity: 1;
+  pointer-events: all;
+  transition: opacity 0.18s;
 }
 
+.admin-dropdown li,
+.blog-dropdown li {
+  padding: 0;
+}
+
+.admin-dropdown a,
+.blog-dropdown a {
+  color: #fff;
+  padding: 15px 32px;
+  font-size: 1.05em;
+  font-weight: 700;
+  display: block;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.admin-dropdown a.active-link,
+.blog-dropdown a.active-link {
+  background: #f9a825;
+  color: #222;
+}
+
+.admin-dropdown a:hover,
+.blog-dropdown a:hover {
+  background: #333;
+  color: #f9a825;
+}
+
+/* Blog/Admin dropdown — highlight parent on open */
+.nav-blog-menu > span.active-link,
+.nav-admin-menu > span.active-link {
+  color: #f9a825;
+  background: #fff;
+  box-shadow: 0 0 0 2px #f9a825;
+  
+}
+
+/* AUTH */
 .auth-links {
   display: flex;
   align-items: center;
-  gap: 13px;
+  gap: 18px;
 }
 
 .nav-auth-link {
   color: #fff;
   text-decoration: none;
-  padding: 5px 13px;
-  background: #0d47a1;
-  border-radius: 6px;
-  font-weight: 600;
-  font-size: 1em;
-  transition: background .22s;
-}
-.nav-auth-link:hover {
-  background: #1565c0;
+  font-weight: 500;
+  font-size: 1.1em;
+  padding: 6px 15px;
+  border-radius: 7px;
+  transition: background 0.16s, color 0.16s;
 }
 
-.username-text {
-  color: #ffe082;
-  font-size: 1.1em;
-  margin-right: 10px;
-  font-weight: bold;
+.nav-auth-link:hover {
+  background: #222e;
 }
 
 .logout-btn {
-  padding: 4px 14px;
-  background: #222;
-  border: 1px solid #fff;
+  background: none;
+  border: 2px solid #fff;
   color: #fff;
-  border-radius: 6px;
-  font-weight: 600;
+  border-radius: 10px;
+  padding: 5px 18px;
+  font-size: 1.1em;
+  font-weight: 500;
   cursor: pointer;
-  font-size: 1em;
-  transition: background .22s;
+  transition: background 0.18s, color 0.18s, border-color 0.18s;
 }
+
 .logout-btn:hover {
-  background: #c62828;
-  color: #fff;
+  background: #fff;
+  color: #f9a825;
+  border-color: #f9a825;
+}
+
+.username-text {
+  color: #f9d769;
+  font-weight: 700;
+  margin-right: 4px;
+  font-size: 1.13em;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .admin-dropdown,
+  .blog-dropdown {
+    top: 110%;
+    left: 0;
+    min-width: 210px;
+    box-shadow: 0 8px 26px #0002;
+    font-size: 1.12em;
+  }
+}
+
+
+@media (max-width: 900px) {
+  .nav {
+    flex-wrap: wrap;
+    height: auto;
+    padding: 0 10px;
+  }
+  .nav-logo img {
+    height: 35px;
+  }
+  .nav-list {
+    gap: 12px;
+    font-size: 1.05em;
+  }
+  .admin-dropdown, .blog-dropdown {
+    min-width: 170px;
+    font-size: 1em;
+  }
+  .auth-links {
+    gap: 8px;
+    font-size: 1em;
+  }
+}
+
+@media (max-width: 600px) {
+  .nav {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0 2px;
+    height: auto;
+  }
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    margin: 0 auto 0 0;
+  }
+  .nav-list {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0;
+    justify-content: flex-start;
+    margin-bottom: 2px;
+  }
+  .nav-list > li {
+    font-size: 1.05em;
+  }
+  .admin-dropdown, .blog-dropdown {
+    left: 0;
+    min-width: 140px;
+ 
+  }
+  .auth-links {
+    flex-direction: row;
+    justify-content: flex-end;
+    font-size: 0.97em;
+    margin: 5px 0;
+  }
 }
